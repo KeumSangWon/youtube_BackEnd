@@ -35,21 +35,7 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        //     $validator = Validator::make($request->all(), [            
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'password' => 'required|string|min:6',
-        //     'name' => 'required|string|max:255',
-        //     'phone_num' => 'required|string|max:255',
-        //     'location' => 'required|string|max:255',
-        //     'picture' => 'required|string|max:255',
-        //     'youtube_url' => 'required|string|max:255',
-        //     'type' => 'required|integer|max:255'
-        // ]);
-
-        // if($validator->fails()){
-        //         return response()->json($validator->errors()->toJson(), 400);
-        // }
-
+    
         $user = User::create([
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
@@ -92,5 +78,12 @@ class UserController extends Controller
         $id=$request->id;
         $user_type = User_type::where('user_id', $id)->first('type_id')->type_id;
         return response()->json($user_type);
+    }
+
+    public function getUserInfo(Request $request) {
+
+        $id = $request->id;
+        $user_info = User::where('id', $id)->first();
+        return response()->json($user_info);
     }
 }

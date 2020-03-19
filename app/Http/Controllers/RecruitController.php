@@ -41,29 +41,6 @@ class RecruitController extends Controller
      */
     public function store(Request $request)
     {
-
-
-        // $validator = Validator::make($request->json()->all(), [
-        //     'user_id' => 'required|string|max:255',
-        //     'title' => 'required|string|max:255',
-        //     'youtubeURL' => 'required|string|max:255',
-        //     'salary' => 'required|string|max:255',
-        //     'career' => 'required|string|max:255',
-        //     'recruitment_type' => 'required|string|max:255',   
-        //     'skill' => 'required|string|max:255',
-        //     'genre' => 'required|string|max:255',
-        //     'video_file' => 'required|string|max:255',
-        //     'academic' => 'required|string|max:255',
-        //     'language' => 'required|string|max:255',
-        //     'etc' => 'required|string|max:255',
-        //     'textra' => 'required|string|max:255',
-        //     'user_type' => 'required|string|max:255'
-        // ]);
-
-        // if($validator->fails()){
-        //     return response()->json($validator->errors()->toJson(), 400);
-        // }
-
         $recruit = Recruit::create([
             "user_id" => $request->get('user_id'), 
             'title'  => $request->get('title'),
@@ -85,28 +62,28 @@ class RecruitController extends Controller
         }
 
         foreach( $request->get('skill') as $item){
-            $acadmic = Recruit_skill::create([
+            $skill = Recruit_skill::create([
                 'recruit_id' => $recruit_id,
                 'skill_id' => $item
             ]);    
         }
 
         foreach( $request->get('genre') as $item){
-            $acadmic = Recruit_genre::create([
+            $genre = Recruit_genre::create([
                 'recruit_id' => $recruit_id,
                 'genre_id' => $item
             ]);    
         }
 
         foreach( $request->get('etc') as $item){
-            $acadmic = Recruit_etc::create([
+            $etc = Recruit_etc::create([
                 'recruit_id' => $recruit_id,
                 'etc_id' => $item
             ]);    
         }
 
         foreach( $request->get('language') as $item){
-            $acadmic = Recruit_language::create([
+            $language = Recruit_language::create([
                 'recruit_id' => $recruit_id,
                 'language_id' => $item
             ]);    

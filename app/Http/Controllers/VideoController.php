@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Video;
+use App\Models\Videos\Video;
+use App\Models\Videos\Video_genre;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
@@ -14,8 +15,9 @@ class VideoController extends Controller
      */
     public function index()
     {
-        return Video::orderBy('id', 'desc')->with('genre')->get();
+        return Video::orderBy('id', 'desc')->with('genre', 'user')->get();
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +37,21 @@ class VideoController extends Controller
      */
     public function store(Request $request)
     {
-        $video = Video::create(request()->all());
+        $video = Video::create([
+            "user_id" => $request->get('user_id'), 
+            'title'  => $request->get('title'),
+            'video_url' => $request->get('video_url'),
+            'video_file' => $request->get('video_file'), 
+            'textarea' => $request->get('textarea'), 
+        ]);
+       $video_id = Video::where('user_id', $request->get('user_id'))->max('id');
+       foreach( $request->get('genre') as $item){
+           $genre = Video_genre::create([
+               'video_id' => $video_id,
+               'genre_id' => $item
+        ]);    
+       }
+      
         return 'ok';
     }
 
@@ -50,7 +66,7 @@ class VideoController extends Controller
         
         // return $request;
         $id = $request->id; 
-        $video = Video::find($id);
+        $video = Video::find($id)->with('user')->first();
         return response()->json($video);
     }
 
@@ -86,5 +102,12 @@ class VideoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function myVideos(Request $request){
+
+        $id = $request->id; 
+        $videos = Video::where('user_id', $id)->with('user')->get();
+        return response()->json($videos);
     }
 }
